@@ -44,14 +44,16 @@ passport.use(new LocalStrategy(User.authenticate()));
 
 app.get("/secrets", (req, res) => {
     if(req.isAuthenticated()) {
-        res.render("secret");
+        console.log(req.user.username);
+        let name = req.user.username;
+        res.render("secret", {username: name});
     } else {
-        res.redirect("login");
+        res.redirect("/login");
     }
 });
 
 app.get("/register", (req, res) => {
-    res.render("register");
+    res.render("register", {message: ""});
 });
 
 app.get("/login", (req, res) => {
@@ -66,8 +68,8 @@ app.get("/logout", (req, res) => {
 app.post("/register", (req, res) => {
     User.register({email: req.body.email, username: req.body.username}, req.body.password, (err, user) => {
         if (err) {
-            console.log(err);
-            res.redirect("/register");
+            console.log(err.message);
+            res.render("register", {message: err.message});
         } else {
             passport.authenticate("local")(req, res, function() {
                 res.redirect("/secrets");
@@ -87,8 +89,15 @@ app.post("/login", (req, res) => {
             console.log(err);
             res.redirect("/register");
         } else {
-            passport.authenticate("local")(req, res, function() {
-                res.redirect("/secrets");
+            User.findOne({"username": req.user.username}, (err, foundUser) => {
+                if(!foundUser) {
+                    console.log("Please regsiter yourself to view secret page.");
+                    res.redirect("/register");
+                } else {
+                    passport.authenticate("local")(req, res, function() {
+                        res.redirect("/secrets");
+                    });
+                }
             });
         }
     });

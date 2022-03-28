@@ -1,6 +1,7 @@
 <%- include("partials/header") -%>
 
 <div class="container p-5">
+    <span id="msg"><%= message %></span>
     <form action="/register" method="post">
         <label for="email" class="form-label">Email:</label>
         <input type="email" name="email" id="email" class="form-control">
