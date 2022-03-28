@@ -1,0 +1,14 @@
+<%- include("partials/header") -%>
+
+<div class="container p-5">
+    <h1>Login</h1>
+    <form action="/login" method="post">
+        <label for="username" class="form-label">Username:</label>
+        <input type="text" name="username" id="username" class="form-control">
+        <label for="password">Password:</label>
+        <input type="password" name="password" id="password" class="form-control">
+        <button class="btn btn-success mt-2 m-auto d-block">SignUp</button>
+    </form>
+</div>
+
+<%- include("partials/footer") -%>
